@@ -13,15 +13,12 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                // Use the lambda DSL to disable CSRF
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())  // Disable CSRF
                 .authorizeHttpRequests(authz -> authz
-                        // Permit requests to public endpoints
-                        .requestMatchers("/api/v1/**").permitAll()
+                        .requestMatchers("/api/v1/**", "/h2-console/**").permitAll()  // Permit API and H2 Console
                         .anyRequest().authenticated())
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable())) // Allow H2 console in iframe
                 .httpBasic(withDefaults())
                 .build();
     }
 }
-
-
