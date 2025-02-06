@@ -10,7 +10,7 @@ spring:
       ddl-auto: validate   # Validate schema; do not auto-update in production
 
 server:
-  port: 8080
+  port: 8081
 
 # Optional: Configure additional production-level properties, such as connection pool settings
 #spring:
