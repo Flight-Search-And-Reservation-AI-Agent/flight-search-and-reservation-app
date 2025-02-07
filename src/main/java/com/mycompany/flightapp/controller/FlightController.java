@@ -52,7 +52,7 @@ public class FlightController {
     }
 
     // Admin-only endpoint to add a new flight
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
     public ResponseEntity<Flight> addFlight(@Valid @RequestBody FlightDTO flightDTO) {
         Flight flight = flightService.addFlight(flightDTO);
