@@ -18,13 +18,13 @@ public class FlightDTO {
     private LocalDateTime arrivalTime;
 
     @NotNull(message = "Origin airport ID is required")
-    private Long originAirportId;
+    private String originAirportId;
 
     @NotNull(message = "Destination airport ID is required")
-    private Long destinationAirportId;
+    private String destinationAirportId;
 
     @NotNull(message = "Aircraft ID is required")
-    private Long aircraftId;
+    private String aircraftId;
 
     @NotNull(message = "Price is required")
     private Double price;
