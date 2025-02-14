@@ -4,7 +4,6 @@ import com.mycompany.flightapp.dto.FlightDTO;
 import com.mycompany.flightapp.model.Aircraft;
 import com.mycompany.flightapp.model.Airport;
 import com.mycompany.flightapp.service.FlightService;
-import com.mycompany.flightapp.service.FlightServiceImpl;
 import com.mycompany.flightapp.repository.AirportRepository;
 import com.mycompany.flightapp.repository.AircraftRepository;
 import org.springframework.boot.CommandLineRunner;

@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface AircraftRepository extends JpaRepository<Aircraft, Long> {
+public interface AircraftRepository extends JpaRepository<Aircraft, String> {
     // Additional custom queries can be defined here if needed.
 }

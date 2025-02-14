@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -52,8 +53,20 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void cancelReservation(Long reservationId) {
+    public void cancelReservation(String reservationId) {
+        // Retrieve the reservation, throw an exception if not found
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found with id: " + reservationId));
 
+        // Update status to "CANCELLED"
+        reservation.setStatus("CANCELLED");
+        reservationRepository.save(reservation);
+    }
+
+
+    @Override
+    public List<Reservation> getReservationsForUser(String userId) {
+        return reservationRepository.findReservationsByUserId(userId);
     }
 }
 
