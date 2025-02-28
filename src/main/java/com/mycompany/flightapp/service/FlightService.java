@@ -5,5 +5,10 @@ import com.mycompany.flightapp.model.Flight;
 
 public interface FlightService {
     Flight addFlight(FlightDTO flightDTO);
-    // Additional flight-related methods can be added here
+
+    Flight updateFlight(String id, FlightDTO flightDTO);
+
+    boolean deleteFlight(String id);
+
+    Flight getFlightById(String id);
 }
