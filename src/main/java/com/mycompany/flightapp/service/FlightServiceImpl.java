@@ -11,6 +11,8 @@ import com.mycompany.flightapp.repository.FlightRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class FlightServiceImpl implements FlightService {
 
@@ -52,5 +54,55 @@ public class FlightServiceImpl implements FlightService {
         flight.setPrice(flightDTO.getPrice());
 
         return flightRepository.save(flight);
+    }
+
+    @Override
+    public Flight updateFlight(String id, FlightDTO flightDTO) {
+        Flight existingFlight = flightRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Flight not found with id: " + id));
+
+        // Update basic flight details
+        existingFlight.setFlightNumber(flightDTO.getFlightNumber());
+        existingFlight.setDepartureTime(flightDTO.getDepartureTime());
+        existingFlight.setArrivalTime(flightDTO.getArrivalTime());
+        existingFlight.setPrice(flightDTO.getPrice());
+
+        // Update origin airport if needed
+        if (flightDTO.getOriginAirportId() != null) {
+            Airport origin = airportRepository.findById(flightDTO.getOriginAirportId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Origin Airport not found with id: " + flightDTO.getOriginAirportId()));
+            existingFlight.setOrigin(origin);
+        }
+
+        // Update destination airport if needed
+        if (flightDTO.getDestinationAirportId() != null) {
+            Airport destination = airportRepository.findById(flightDTO.getDestinationAirportId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Destination Airport not found with id: " + flightDTO.getDestinationAirportId()));
+            existingFlight.setDestination(destination);
+        }
+
+        // Update aircraft if needed
+        if (flightDTO.getAircraftId() != null) {
+            Aircraft aircraft = aircraftRepository.findById(flightDTO.getAircraftId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: " + flightDTO.getAircraftId()));
+            existingFlight.setAircraft(aircraft);
+        }
+
+        return flightRepository.save(existingFlight);
+    }
+
+    @Override
+    public boolean deleteFlight(String id){
+        Optional<Flight> optionalDelete = flightRepository.findById(id);
+        if(!optionalDelete.isPresent())return false;
+        Flight flight=optionalDelete.get();
+        flightRepository.delete(flight);
+        return true;
+    }
+
+    @Override
+    public  Flight getFlightById(String id){
+        Optional<Flight> optionalFlight = flightRepository.findById(id);
+        return optionalFlight.orElse(null);
     }
 }

@@ -5,6 +5,7 @@ import com.mycompany.flightapp.exception.ResourceNotFoundException;
 import com.mycompany.flightapp.model.User;
 import com.mycompany.flightapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,19 +15,25 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
+
+
 
     @Override
     public User createUser(UserDTO userDTO) {
-        // In production, ensure that password is hashed, and you handle duplicate emails/usernames
+        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Username already taken: " + userDTO.getUsername());
+        }
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword()); // Hash the password in a real application!
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setRole(userDTO.getRole());
         return userRepository.save(user);
     }
@@ -47,15 +54,25 @@ public class UserServiceImpl implements UserService {
 
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword()); // Again, consider hashing the password
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         user.setRole(userDTO.getRole());
 
         return userRepository.save(user);
     }
 
     @Override
-    public void deleteUser(String userId) {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    public boolean  deleteUser(String userId) {
+        Optional<User> optionalUser = userRepository.findByUserId(userId);
+        if(!optionalUser.isPresent()){
+            return false;
+        }
+        User user=optionalUser.get();
         userRepository.delete(user);
+        return true;
+    }
+
+    @Override
+    public Optional<User> getUserByUsername(String username) {
+        return Optional.empty();
     }
 }

@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ReservationService {
     Reservation createReservation(ReservationDTO reservationDTO);
-    void cancelReservation(String reservationId);
+    boolean cancelReservation(String reservationId);
     List<Reservation> getReservationsForUser(String userId);
 }

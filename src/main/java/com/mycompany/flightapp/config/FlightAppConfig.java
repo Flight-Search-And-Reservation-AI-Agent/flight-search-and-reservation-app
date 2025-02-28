@@ -19,7 +19,8 @@ public class FlightAppConfig {
     public CommandLineRunner demo(AirportRepository airportRepo, AircraftRepository aircraftRepo, FlightService flightService) {
         return args -> {
             // Save airports first
-            Airport origin = airportRepo.save(new Airport("Delhi", "DEL", "Delhi", "India"));
+            Airport origin = new Airport("Delhi", "DEL", "Delhi", "India");
+            origin = airportRepo.save(origin);
             Airport destination = airportRepo.save(new Airport("Mumbai", "BOM", "Mumbai", "India"));
 
             // Save aircraft

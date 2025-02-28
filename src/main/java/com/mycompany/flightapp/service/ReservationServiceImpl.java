@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -53,14 +54,17 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public void cancelReservation(String reservationId) {
+    public boolean cancelReservation(String reservationId) {
         // Retrieve the reservation, throw an exception if not found
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ResourceNotFoundException("Reservation not found with id: " + reservationId));
-
+        Optional<Reservation> optionalReservation = reservationRepository.findById(reservationId);
+        if(!optionalReservation.isPresent()){
+            return false;
+        }
+        Reservation reservation=optionalReservation.get();
         // Update status to "CANCELLED"
         reservation.setStatus("CANCELLED");
         reservationRepository.save(reservation);
+        return  true;
     }
 
 
