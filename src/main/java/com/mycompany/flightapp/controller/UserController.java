@@ -107,8 +107,8 @@ public class UserController {
             }
         }
         catch (Exception e){
-            log.warn("Error updating user with id: {}",userId,e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating user");
+            log.warn("Error deleting user with id: {}",userId,e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user");
         }
     }
 }

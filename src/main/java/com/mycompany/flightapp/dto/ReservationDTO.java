@@ -1,10 +1,14 @@
 package com.mycompany.flightapp.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReservationDTO {
 
     @NotNull(message = "User ID cannot be null")

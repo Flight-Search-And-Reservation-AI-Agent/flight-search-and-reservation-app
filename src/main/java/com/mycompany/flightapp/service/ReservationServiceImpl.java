@@ -70,6 +70,9 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> getReservationsForUser(String userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+
         return reservationRepository.findReservationsByUserId(userId);
     }
 }
