@@ -1,15 +1,19 @@
 package com.mycompany.flightapp.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Data
 @Table(name = "users")
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -34,9 +38,9 @@ public class User {
     @NotBlank
     private String role; // e.g., "CUSTOMER", "ADMIN"
 
-    // Constructors
-    public User() {
-    }
+//    // Constructors
+//    public User() {
+//    }
 
     public User(String username, String email, String password, String role) {
         this.username = username;
