@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ReservationServiceTest {
+class ReservationServiceTest {
 
     @Mock
     private ReservationRepository reservationRepository;
@@ -94,6 +94,8 @@ public class ReservationServiceTest {
 
     @Test
     void testGetReservationForUser_Success(){
+        when(userRepository.findById("user123")).thenReturn(Optional.of(user));
+
         when(reservationRepository.findReservationsByUserId("user123")).thenReturn(List.of(reservation));
 
         List<Reservation> reservations = reservationService.getReservationsForUser("user123");
