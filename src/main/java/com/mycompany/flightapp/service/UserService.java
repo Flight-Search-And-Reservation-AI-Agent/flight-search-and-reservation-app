@@ -2,6 +2,7 @@ package com.mycompany.flightapp.service;
 
 import com.mycompany.flightapp.dto.UserDTO;
 import com.mycompany.flightapp.model.User;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,4 +25,6 @@ public interface UserService {
     boolean deleteUser(String userId);
 
     Optional<User> getUserByUsername(String username);
+
+
 }
