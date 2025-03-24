@@ -1,13 +1,13 @@
 package com.mycompany.flightapp.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@ToString
 public class LoginRequest {
 
     @NotBlank(message = "Username is required")

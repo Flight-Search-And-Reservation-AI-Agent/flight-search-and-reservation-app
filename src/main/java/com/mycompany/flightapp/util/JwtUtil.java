@@ -1,10 +1,11 @@
 package com.mycompany.flightapp.util;
 
-import io.jsonwebtoken.JwtException;
+
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -40,15 +41,15 @@ public class JwtUtil {
                 .parseClaimsJws(token).getBody().getExpiration();
     }
 
+    //check if the token has expired
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromJwtToken(token);
+        return expiration.before(new Date());
+    }
 
     //Validate Jwt Token
-    public boolean validateJwtToken(String authToken){
-        try{
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(authToken);
-            return true;
-        } catch (JwtException | IllegalArgumentException e){
-            log.error("authentication failed",e);
-        }
-        return false;
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUserNameFromJwtToken(token);
+        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

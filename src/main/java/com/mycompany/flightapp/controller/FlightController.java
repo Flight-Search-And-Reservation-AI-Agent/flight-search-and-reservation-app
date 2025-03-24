@@ -2,7 +2,6 @@ package com.mycompany.flightapp.controller;
 
 import com.mycompany.flightapp.dto.FlightDTO;
 import com.mycompany.flightapp.model.Flight;
-import com.mycompany.flightapp.service.FlightSearchService;
 import com.mycompany.flightapp.service.FlightService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -20,12 +19,10 @@ import java.util.List;
 @Slf4j
 public class FlightController {
 
-    private final FlightSearchService flightSearchService;
     private final FlightService flightService;
 
     @Autowired
-    public FlightController(FlightSearchService flightSearchService, FlightService flightService) {
-        this.flightSearchService = flightSearchService;
+    public FlightController(FlightService flightService) {
         this.flightService = flightService;
     }
 
@@ -35,7 +32,7 @@ public class FlightController {
             @RequestParam String destination,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime departureDate) {
         try{
-            List<Flight> flights = flightSearchService.searchFlights(origin, destination, departureDate);
+            List<Flight> flights = flightService.searchFlights(origin, destination, departureDate);
             if (flights.isEmpty()) {
                 log.warn("No flights found for search criteria: origin {}, destination {}, departureDate {}",
                         origin, destination, departureDate);
