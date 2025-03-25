@@ -20,11 +20,12 @@ public class JwtUtil {
     private final long jwtExpirations= 10*60*60*1000;
 
     //Generate token based on username
-    public String generateJwtToken(String username){
+    public String generateJwtToken(String username, String role) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim("role", "ROLE_" + role.toUpperCase()) // Add role to the JWT payload
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime()+jwtExpirations))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpirations))
                 .signWith(key)
                 .compact();
     }
@@ -40,6 +41,13 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build()
                 .parseClaimsJws(token).getBody().getExpiration();
     }
+
+    //Extract role from JwtToken
+    public String getRoleFromJwtToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build()
+                .parseClaimsJws(token).getBody().get("role", String.class);
+    }
+
 
     //check if the token has expired
     private Boolean isTokenExpired(String token) {

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +27,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Create a new user
+    // Only ADMIN can create a user
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO userDTO) {
+        log.info("Admin attempting to create a new user with username: {}", userDTO.getUsername());
         try{
             User createdUser = userService.createUser(userDTO);
             return ResponseEntity.ok(createdUser);
@@ -43,7 +46,8 @@ public class UserController {
 
     }
 
-    // Get user by ID
+    // Both ADMIN and USER roles can view user details
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable String userId) {
         try{
@@ -61,7 +65,8 @@ public class UserController {
         }
     }
 
-    // Get all users
+    // Only ADMIN can view all users
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         try{
@@ -74,9 +79,11 @@ public class UserController {
         }
     }
 
-    // Update a user
+    // Only ADMIN can update user details
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{userId}")
     public ResponseEntity<?> updateUser(@PathVariable String userId, @Valid @RequestBody UserDTO userDTO) {
+        log.info("Admin attempting to update user with ID: {}", userId);
         try{
             User updatedUser = userService.updateUser(userId, userDTO);
             if(updatedUser != null){
@@ -94,9 +101,11 @@ public class UserController {
 
     }
 
-    // Delete a user
+    // Only ADMIN can delete a user
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable String userId) {
+        log.info("Admin attempting to delete user with ID: {}", userId);
         try{
             boolean deleted = userService.deleteUser(userId);
             if (deleted) {
