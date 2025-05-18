@@ -9,4 +9,7 @@ public interface ReservationService {
     Reservation createReservation(ReservationDTO reservationDTO);
     boolean cancelReservation(String reservationId);
     List<Reservation> getReservationsForUser(String userId);
+    List<Reservation> getAllReservations();
+    public Reservation updateReservation(String reservationId, Reservation updatedData);
+
 }

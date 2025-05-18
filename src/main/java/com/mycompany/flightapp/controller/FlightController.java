@@ -1,6 +1,7 @@
 package com.mycompany.flightapp.controller;
 
 import com.mycompany.flightapp.dto.FlightDTO;
+import com.mycompany.flightapp.dto.FlightResponseDTO;
 import com.mycompany.flightapp.model.Flight;
 import com.mycompany.flightapp.service.FlightService;
 import jakarta.validation.Valid;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -26,7 +28,15 @@ public class FlightController {
         this.flightService = flightService;
     }
 
+
+    @GetMapping
+    public ResponseEntity<?> getAllFlights() {
+        List<FlightResponseDTO> flights = flightService.getAllFlights();
+        return ResponseEntity.ok(flights);
+    }
+
     @GetMapping("/search")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> searchFlights(
             @RequestParam String origin,
             @RequestParam String destination,
@@ -42,13 +52,16 @@ public class FlightController {
             log.info("Flight search successful for origin: {}, destination: {}, departureDate: {}",
                     origin, destination, departureDate);
             // Convert to DTO
-            List<FlightDTO> flightDTOs = flights.stream().map(flight -> {
-                FlightDTO dto = new FlightDTO();
+            List<FlightResponseDTO> flightDTOs = flights.stream().map(flight -> {
+                FlightResponseDTO dto = new FlightResponseDTO();
                 dto.setFlightNumber(flight.getFlightNumber());
                 dto.setDepartureTime(flight.getDepartureTime());
                 dto.setArrivalTime(flight.getArrivalTime());
                 dto.setOriginAirportId(flight.getOrigin().getAirportId());
+                dto.setOriginAirportName(flight.getOrigin().getName());
                 dto.setDestinationAirportId(flight.getDestination().getAirportId());
+                dto.setDestinationAirportName(flight.getDestination().getName());
+                dto.setAirline(flight.getAircraft().getAirline());
                 dto.setAircraftId(flight.getAircraft().getAircraftId());
                 dto.setPrice(flight.getPrice());
                 return dto;
@@ -67,6 +80,7 @@ public class FlightController {
 
     //Retrieve fligth details by id
     @GetMapping("/{id}")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getFlightById(@PathVariable String id){
         try{
             Flight flight=flightService.getFlightById(id);
@@ -86,8 +100,8 @@ public class FlightController {
 
 
     // Admin-only endpoint to add a new flight
-//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/add")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addFlight(@Valid @RequestBody FlightDTO flightDTO) {
         try{
             Flight flight = flightService.addFlight(flightDTO);
@@ -101,6 +115,7 @@ public class FlightController {
 
     // Update flight Info
     @PutMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateFlight(@PathVariable String id, @Valid @RequestBody FlightDTO flightDTO){
         try{
             Flight updatedFlight =flightService.updateFlight(id,flightDTO);
@@ -120,6 +135,7 @@ public class FlightController {
 
     //Delete flight by id
     @DeleteMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteFlight(@PathVariable String id){
         try{
             boolean deleted= flightService.deleteFlight(id);

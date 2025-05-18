@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface UserService {
 
     // Create a new user
-    User createUser(UserDTO userDTO);
+    User createUser(UserDTO userDTO,String role);
 
     // Retrieve a user by ID
     Optional<User> getUserById(String userId);

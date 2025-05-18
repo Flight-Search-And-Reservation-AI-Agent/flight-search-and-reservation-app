@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -75,5 +77,20 @@ public class ReservationServiceImpl implements ReservationService {
 
         return reservationRepository.findReservationsByUserId(userId);
     }
+
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
+
+    public Reservation updateReservation(String reservationId, Reservation updatedData) {
+        return reservationRepository.findById(reservationId).map(existing -> {
+            existing.setStatus(updatedData.getStatus());
+            existing.setSeatNumber(updatedData.getSeatNumber());
+            // You can update more fields as needed
+            return reservationRepository.save(existing);
+        }).orElse(null);
+    }
+
+
 }
 
