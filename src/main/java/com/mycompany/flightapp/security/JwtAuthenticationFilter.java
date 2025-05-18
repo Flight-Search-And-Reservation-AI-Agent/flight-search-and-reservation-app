@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private Logger logger = LoggerFactory.getLogger(OncePerRequestFilter.class);
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
 
@@ -45,8 +46,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (path.equals("/api/auth/register" )) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String requestHeader = request.getHeader("Authorization");
-//        logger.info(" Header :  {}", requestHeader);
         String username = null;
         String token = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
@@ -57,13 +62,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = this.jwtUtil.getUserNameFromJwtToken(token);
 
             } catch (IllegalArgumentException e) {
-                logger.info("Illegal Argument while fetching the username !!");
+                log.info("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
             } catch (ExpiredJwtException e) {
-                logger.info("Given jwt token is expired !!");
+                log.info("Given jwt token is expired !!");
                 e.printStackTrace();
             } catch (MalformedJwtException e) {
-                logger.info("Some changed has done in token !! Invalid Token");
+                log.info("Some changed has done in token !! Invalid Token");
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -71,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } else {
-            logger.info("Invalid Header Value !! ");
+            log.info("Invalid Header Value !! ");
         }
         //
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -87,7 +92,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                logger.info("Validation fails !!");
+                log.info("Validation fails !!");
             }
         }
         filterChain.doFilter(request, response);

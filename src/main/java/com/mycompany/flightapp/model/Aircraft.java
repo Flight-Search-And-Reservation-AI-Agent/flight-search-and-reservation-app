@@ -19,6 +19,7 @@ public class Aircraft {
 
     private String model;
     private int capacity;
+    private String airline;
 
     // Custom constructor (without ID)
     public Aircraft(String model, int capacity) {

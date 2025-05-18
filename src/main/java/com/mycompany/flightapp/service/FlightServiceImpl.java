@@ -1,6 +1,7 @@
 package com.mycompany.flightapp.service;
 
 import com.mycompany.flightapp.dto.FlightDTO;
+import com.mycompany.flightapp.dto.FlightResponseDTO;
 import com.mycompany.flightapp.exception.ResourceNotFoundException;
 import com.mycompany.flightapp.model.Aircraft;
 import com.mycompany.flightapp.model.Airport;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightServiceImpl implements FlightService {
@@ -30,6 +32,29 @@ public class FlightServiceImpl implements FlightService {
         this.airportRepository = airportRepository;
         this.aircraftRepository = aircraftRepository;
     }
+
+
+    @Override
+    public List<FlightResponseDTO> getAllFlights() {
+        List<Flight> flights = flightRepository.findAll();
+        return flights.stream().map(flight -> {
+            return FlightResponseDTO.builder()
+                    .flightId(flight.getFlightId())
+                    .flightNumber(flight.getFlightNumber())
+                    .departureTime(flight.getDepartureTime())
+                    .arrivalTime(flight.getArrivalTime())
+                    .originAirportId(flight.getOrigin().getAirportId())
+                    .originAirportName(flight.getOrigin().getName())
+                    .destinationAirportId(flight.getDestination().getAirportId())
+                    .destinationAirportName(flight.getDestination().getName())
+                    .aircraftId(flight.getAircraft().getAircraftId()) // Assuming same structure for Aircraft
+                    .airline(flight.getAircraft().getAirline())
+                    .price(flight.getPrice())
+                    .build();
+        }).collect(Collectors.toList());
+
+    }
+
 
     @Override
     public Flight addFlight(FlightDTO flightDTO) {

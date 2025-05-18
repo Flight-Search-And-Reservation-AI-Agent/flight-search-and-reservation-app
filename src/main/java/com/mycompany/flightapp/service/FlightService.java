@@ -1,6 +1,7 @@
 package com.mycompany.flightapp.service;
 
 import com.mycompany.flightapp.dto.FlightDTO;
+import com.mycompany.flightapp.dto.FlightResponseDTO;
 import com.mycompany.flightapp.model.Flight;
 
 import java.time.LocalDateTime;
@@ -16,5 +17,7 @@ public interface FlightService {
     Flight getFlightById(String id);
 
     List<Flight> searchFlights(String originCode, String destinationCode, LocalDateTime departureDate);
+
+    List<FlightResponseDTO> getAllFlights();
 
 }

@@ -2,7 +2,9 @@ package com.mycompany.flightapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @Table(name = "reservations")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reservation {
 
     @Id

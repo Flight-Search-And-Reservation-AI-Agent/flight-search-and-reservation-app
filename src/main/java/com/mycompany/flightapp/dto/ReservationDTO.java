@@ -17,6 +17,8 @@ public class ReservationDTO {
     @NotNull(message = "Flight ID cannot be null")
     private String flightId;
 
+    private String status;
+
     // Optional: if the client can select a seat
     private String seatNumber;
 

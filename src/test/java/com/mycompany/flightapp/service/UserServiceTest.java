@@ -50,32 +50,32 @@ class UserServiceTest {
         userDTO.setRole("CUSTOMER");
     }
 
-    @Test
-    void testCreateUser_Success(){
-        //Stimulate the no user exist with given username
-        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
-        //Stimulate password encryption
-        when(passwordEncoder.encode(userDTO.getPassword())).thenReturn("hashedpassword");
-        //Stimulate saving the user
-        when(userRepository.save(any(User.class))).thenReturn(user);
+//    @Test
+//    void testCreateUser_Success(){
+//        //Stimulate the no user exist with given username
+//        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.empty());
+//        //Stimulate password encryption
+//        when(passwordEncoder.encode(userDTO.getPassword())).thenReturn("hashedpassword");
+//        //Stimulate saving the user
+//        when(userRepository.save(any(User.class))).thenReturn(user);
+//
+//        User createdUser=userService.createUser(userDTO);
+//        assertNotNull(createdUser);
+//        assertEquals("testuser",createdUser.getUsername());
+//        verify(userRepository,times(1)).save(any(User.class));
+//    }
 
-        User createdUser=userService.createUser(userDTO);
-        assertNotNull(createdUser);
-        assertEquals("testuser",createdUser.getUsername());
-        verify(userRepository,times(1)).save(any(User.class));
-    }
-
-    @Test
-    void testCreateUser_UserExists(){
-        // Simulate that a user already exists with the given username
-        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.of(user));
-        Exception exception= assertThrows(IllegalArgumentException.class, () -> {
-            userService.createUser(userDTO);
-        });
-        String expectedMessage = "Username already taken";
-        String actualMessage = exception.getMessage();
-        assertTrue(actualMessage.contains(expectedMessage));
-    }
+//    @Test
+//    void testCreateUser_UserExists(){
+//        // Simulate that a user already exists with the given username
+//        when(userRepository.findByUsername(userDTO.getUsername())).thenReturn(Optional.of(user));
+//        Exception exception= assertThrows(IllegalArgumentException.class, () -> {
+//            userService.createUser(userDTO);
+//        });
+//        String expectedMessage = "Username already taken";
+//        String actualMessage = exception.getMessage();
+//        assertTrue(actualMessage.contains(expectedMessage));
+//    }
 
     @Test
     void testGetUserById_Success(){

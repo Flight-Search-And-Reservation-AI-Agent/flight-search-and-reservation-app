@@ -41,6 +41,7 @@ public class AircraftServiceImpl implements AircraftService {
         Aircraft existingAircraft= aircraftRepository.findById(aircraftId).orElseThrow(() -> new ResourceNotFoundException("Aircraft not found with id: "+aircraftId));
         existingAircraft.setModel(aircraft.getModel());
         existingAircraft.setCapacity(aircraft.getCapacity());
+        existingAircraft.setAirline(aircraft.getAirline());
         log.info("Updating aircraft with id: {}",aircraftId);
         return aircraftRepository.save(existingAircraft);
     }

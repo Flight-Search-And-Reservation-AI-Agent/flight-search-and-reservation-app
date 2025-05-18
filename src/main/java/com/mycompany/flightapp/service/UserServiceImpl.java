@@ -28,18 +28,34 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
+//    @Override
+////    public User createUser(UserDTO userDTO) {
+////        if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
+////            throw new IllegalArgumentException("Username already taken: " + userDTO.getUsername());
+////        }
+////        User user = new User();
+////        user.setUsername(userDTO.getUsername());
+////        user.setEmail(userDTO.getEmail());
+////        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+////        user.setRole(userDTO.getRole());
+////        return userRepository.save(user);
+////    }
+
     @Override
-    public User createUser(UserDTO userDTO) {
+    public User createUser(UserDTO userDTO, String role) {
         if (userRepository.findByUsername(userDTO.getUsername()).isPresent()) {
             throw new IllegalArgumentException("Username already taken: " + userDTO.getUsername());
         }
+
         User user = new User();
         user.setUsername(userDTO.getUsername());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        user.setRole(userDTO.getRole());
+        user.setRole(role); // Set role based on backend logic
+
         return userRepository.save(user);
     }
+
 
     @Override
     public Optional<User> getUserById(String userId) {
@@ -76,8 +92,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public Optional<User> getUserByUsername(String username) {
-        return Optional.empty();
+        return userRepository.findByUsername(username);
     }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

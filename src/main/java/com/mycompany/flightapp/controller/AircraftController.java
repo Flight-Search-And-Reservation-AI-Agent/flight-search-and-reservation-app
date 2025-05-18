@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,7 +24,8 @@ public class AircraftController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllAirports(){
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<?> getAllAircrafts(){
         try{
             List<Aircraft> aircraftList=aircraftService.getAllAircrafts();
             log.info("Retrieved {} aircrafts.",aircraftList.size());
@@ -36,6 +38,7 @@ public class AircraftController {
     }
 
     @GetMapping("/{aircraftId}")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getAirportById(@PathVariable String aircraftId){
         try {
             Optional<Aircraft> aircraftOptional = aircraftService.getAircraftWithId(aircraftId);
@@ -54,6 +57,7 @@ public class AircraftController {
     }
 
     @PostMapping
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createAirport(@RequestBody Aircraft aircraft){
         try {
             Aircraft created = aircraftService.createAircraft(aircraft);
@@ -67,6 +71,7 @@ public class AircraftController {
     }
 
     @PutMapping("/{aircraftId}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatedAirport(@PathVariable String aircraftId,@RequestBody Aircraft aircraft){
         try{
             Aircraft updateAircraft = aircraftService.updateAircraft(aircraftId,aircraft);
@@ -85,6 +90,7 @@ public class AircraftController {
     }
 
     @DeleteMapping("/{aircraftId}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletedAirport(@PathVariable String aircraftId){
         try{
             boolean deleteAirport = aircraftService.deleteAircraft(aircraftId);
