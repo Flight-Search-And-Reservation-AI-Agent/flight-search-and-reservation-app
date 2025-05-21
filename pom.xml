@@ -124,7 +124,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.6.0</version> <!-- Use the latest stable version -->
+			<version>42.6.1</version> <!-- Use the latest stable version -->
 		</dependency>
 
 
