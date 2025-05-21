@@ -1,24 +1,22 @@
 spring:
   datasource:
-    url: jdbc:mysql://prod-db-server:3306/flightdb?useSSL=false&serverTimezone=UTC
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: prodUser
-    password: prodPassword
+    url: jdbc:postgresql://flight-app-backend-flight-app-backend.j.aivencloud.com:27541/defaultdb?sslmode=require
+    driver-class-name: org.postgresql.Driver
+    username:
+    password:
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: validate   # Validate schema; do not auto-update in production
+      ddl-auto: update   # in prod, keep validate or none; for dev, use update/create-drop
+  h2:
+    console:
+      enabled: false
 
 server:
-  port: 8081
+  port: 8080
 
-# Optional: Configure additional production-level properties, such as connection pool settings
-#spring:
-#  datasource:
-#    hikari:
-#      maximum-pool-size: 20
-#
-#logging:
-#  level:
-#    org:
-#      springframework: WARN
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl: DEBUG
+    org.springframework.jdbc.datasource: DEBUG
