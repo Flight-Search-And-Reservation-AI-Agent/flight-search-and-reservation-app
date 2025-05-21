@@ -17,5 +17,7 @@ public class JwtResponse {
 
     private Date expiryDate;
 
+    private String role;
+
 
 }

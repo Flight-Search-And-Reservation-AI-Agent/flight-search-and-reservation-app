@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chat_messages")
@@ -21,13 +21,12 @@ public class ChatMessage {
     @Column(name = "chat_message_id", updatable = false, nullable = false)
     private String id;
 
-    private String tripGroupId;
 
+    private String groupId;
+    private String senderId;
     private String senderUsername;
-
-    @Column(columnDefinition = "TEXT")
     private String content;
+    private LocalDateTime timestamp;
 
-    private Instant timestamp; // store as Instant for consistency
 }
 

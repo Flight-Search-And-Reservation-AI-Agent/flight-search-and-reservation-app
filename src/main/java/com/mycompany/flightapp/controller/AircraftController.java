@@ -24,7 +24,7 @@ public class AircraftController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getAllAircrafts(){
         try{
             List<Aircraft> aircraftList=aircraftService.getAllAircrafts();
@@ -38,8 +38,8 @@ public class AircraftController {
     }
 
     @GetMapping("/{aircraftId}")
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-    public ResponseEntity<?> getAirportById(@PathVariable String aircraftId){
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<?> getAircraftById(@PathVariable String aircraftId){
         try {
             Optional<Aircraft> aircraftOptional = aircraftService.getAircraftWithId(aircraftId);
             if(aircraftOptional.isPresent()){
@@ -57,8 +57,8 @@ public class AircraftController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createAirport(@RequestBody Aircraft aircraft){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> createAircraft(@RequestBody Aircraft aircraft){
         try {
             Aircraft created = aircraftService.createAircraft(aircraft);
             log.info("Created aircraft with id: {}",created.getAircraftId());
@@ -71,8 +71,8 @@ public class AircraftController {
     }
 
     @PutMapping("/{aircraftId}")
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updatedAirport(@PathVariable String aircraftId,@RequestBody Aircraft aircraft){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updatedAircraft(@PathVariable String aircraftId,@RequestBody Aircraft aircraft){
         try{
             Aircraft updateAircraft = aircraftService.updateAircraft(aircraftId,aircraft);
             if(updateAircraft!=null){
@@ -90,8 +90,8 @@ public class AircraftController {
     }
 
     @DeleteMapping("/{aircraftId}")
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deletedAirport(@PathVariable String aircraftId){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deletedAircraft(@PathVariable String aircraftId){
         try{
             boolean deleteAirport = aircraftService.deleteAircraft(aircraftId);
             if (deleteAirport){

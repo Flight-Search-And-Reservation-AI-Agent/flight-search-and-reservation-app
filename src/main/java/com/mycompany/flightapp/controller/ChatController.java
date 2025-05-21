@@ -4,13 +4,12 @@ import com.mycompany.flightapp.model.ChatMessage;
 import com.mycompany.flightapp.repository.ChatMessageRepository;
 import com.mycompany.flightapp.service.PresenceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,46 +27,26 @@ public class ChatController {
         this.presenceService = presenceService;
     }
 
-    @MessageMapping("/chat.sendMessage")
+    @MessageMapping("/sendMessage")
     public void sendMessage(ChatMessage chatMessage) {
+        chatMessage.setTimestamp(LocalDateTime.now());
         // 1. Save to DB
-        ChatMessage entity = new ChatMessage(
-                null,                             // id (UUID will be auto-generated)
-                chatMessage.getTripGroupId(),
-                chatMessage.getSenderUsername(),
-                chatMessage.getContent(),
-                Instant.now()                     // timestamp
-        );
-        ChatMessage savedMessage = chatMessageRepository.save(entity);
+        ChatMessage savedMessage = chatMessageRepository.save(chatMessage);
 
         // 2. Send to WebSocket subscribers
         messagingTemplate.convertAndSend(
-                "/topic/group/" + savedMessage.getTripGroupId(),
+                "/topic/group/" + savedMessage.getGroupId(),
                 savedMessage
         );
     }
 
     // Fetch chat history
-    @GetMapping("/history/{tripGroupId}")
-    public List<ChatMessage> getChatHistory(@PathVariable String tripGroupId) {
-        return chatMessageRepository.findByTripGroupIdOrderByTimestampAsc(tripGroupId);
+    @GetMapping("/messages/{groupId}")
+    public ResponseEntity<List<ChatMessage>> getMessages(@PathVariable String groupId) {
+        return ResponseEntity.ok(chatMessageRepository.findByGroupIdOrderByTimestampAsc(groupId));
     }
 
 
-    @MessageMapping("/chat.addUser")
-    public void addUser(@Payload ChatMessage chatMessage,
-                        SimpMessageHeaderAccessor headerAccessor) {
-        // Save username and tripGroupId in WebSocket session
-        headerAccessor.getSessionAttributes().put("username", chatMessage.getSenderUsername());
-        headerAccessor.getSessionAttributes().put("tripGroupId", chatMessage.getTripGroupId());
 
-        // Mark user online
-        presenceService.userConnected(chatMessage.getTripGroupId(), chatMessage.getSenderUsername());
 
-        // Optionally broadcast updated list
-        messagingTemplate.convertAndSend(
-                "/topic/group/" + chatMessage.getTripGroupId() + "/presence",
-                presenceService.getOnlineUsers(chatMessage.getTripGroupId())
-        );
-    }
 }

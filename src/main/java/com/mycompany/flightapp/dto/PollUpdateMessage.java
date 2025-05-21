@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OptionDTO {
-    private String optionId; // Unique identifier for each option
-    private String optionText;
-    private int voteCount;
+public class PollUpdateMessage {
+    private String pollId;
+    private List<OptionDTO> options;
 }

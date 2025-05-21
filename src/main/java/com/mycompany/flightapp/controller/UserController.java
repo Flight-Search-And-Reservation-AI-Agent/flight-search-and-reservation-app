@@ -66,7 +66,7 @@ public class UserController {
     }
 
     // Only ADMIN can view all users
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         try{
@@ -102,7 +102,7 @@ public class UserController {
     }
 
     // Only ADMIN can delete a user
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{userId}")
     public ResponseEntity<?> deleteUser(@PathVariable String userId) {
         log.info("Admin attempting to delete user with ID: {}", userId);

@@ -5,6 +5,7 @@ import com.mycompany.flightapp.model.ChecklistItem;
 import com.mycompany.flightapp.service.ChecklistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ChecklistController {
     private ChecklistService checklistService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<ChecklistItem> addItem(
             @PathVariable String tripGroupId,
             @RequestBody CheckListDTO checkListDTO) {
@@ -26,18 +28,21 @@ public class ChecklistController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<ChecklistItem>> getChecklist(@PathVariable String tripGroupId) {
         List<ChecklistItem> items = checklistService.getChecklistForTripGroup(tripGroupId);
         return ResponseEntity.ok(items);
     }
 
     @PatchMapping("/toggle/{itemId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<ChecklistItem> toggleComplete(@PathVariable String itemId) {
         ChecklistItem updatedItem = checklistService.toggleComplete(itemId);
         return ResponseEntity.ok(updatedItem);
     }
 
     @PutMapping("/{checklistId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<ChecklistItem> updateChecklist(@PathVariable String checklistId,
                                                          @RequestBody CheckListDTO checkListDTO) {
         ChecklistItem updated = checklistService.updateChecklist(checklistId, checkListDTO);
@@ -45,6 +50,7 @@ public class ChecklistController {
     }
 
     @DeleteMapping("/{checklistId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<String> deleteChecklist(@PathVariable String checklistId) {
         checklistService.deleteChecklist(checklistId);
         return ResponseEntity.ok("Checklist item deleted successfully.");

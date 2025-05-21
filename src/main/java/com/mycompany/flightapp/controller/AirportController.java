@@ -24,7 +24,7 @@ public class AirportController {
     }
 
     @GetMapping
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getAllAirports(){
         try{
             List<Airport> airportList=airportService.getAllAirports();
@@ -38,7 +38,7 @@ public class AirportController {
     }
 
     @GetMapping("/{airportId}")
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getAirportById(@PathVariable String airportId){
         try {
             Optional<Airport> airportOpt = airportService.getAirportById(airportId);
@@ -57,7 +57,7 @@ public class AirportController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createAirport(@RequestBody Airport airport){
         try {
             Airport created = airportService.createAirport(airport);
@@ -71,7 +71,7 @@ public class AirportController {
     }
 
     @PutMapping("/{airportId}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updatedAirport(@PathVariable String airportId,@RequestBody Airport airport){
         try{
             Airport updateAirport = airportService.updateAirport(airportId, airport);
@@ -90,7 +90,7 @@ public class AirportController {
     }
 
     @DeleteMapping("/{airportId}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deletedAirport(@PathVariable String airportId){
         try{
             boolean deleteAirport = airportService.deleteAirport(airportId);

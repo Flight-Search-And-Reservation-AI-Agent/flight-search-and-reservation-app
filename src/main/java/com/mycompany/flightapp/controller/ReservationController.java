@@ -27,7 +27,7 @@ public class ReservationController {
 
 
     @GetMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllReservations() {
         try {
             List<Reservation> reservations = reservationService.getAllReservations();
@@ -39,7 +39,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{reservationId}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateReservation(
             @PathVariable String reservationId,
             @RequestBody Reservation updatedReservationData) {
@@ -59,7 +59,7 @@ public class ReservationController {
 
     // Endpoint to retrieve reservations for a user by their UUID
     @GetMapping("/{userId}")
-//    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<?> getReservationsForUser(@PathVariable String userId) {
         try{
             List<Reservation> reservations = reservationService.getReservationsForUser(userId);
@@ -77,7 +77,7 @@ public class ReservationController {
     }
 
     @PostMapping
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createReservation(@RequestBody ReservationDTO reservationDTO) {
 
         try{
@@ -90,7 +90,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{reservationId}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> cancelReservation(@PathVariable String reservationId) {
         try{
             boolean canceled= reservationService.cancelReservation(reservationId);
