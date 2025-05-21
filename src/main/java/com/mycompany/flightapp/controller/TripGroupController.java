@@ -21,6 +21,7 @@ public class TripGroupController {
     private final TripGroupService tripGroupService;
 
         @PostMapping
+        @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
         public ResponseEntity<?> createGroup(@RequestBody TripGroupDTO groupDTO,
                                              @RequestParam String creatorUserId) {
             try {
@@ -38,6 +39,7 @@ public class TripGroupController {
         }
 
         @GetMapping("/my")
+        @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
         public ResponseEntity<List<TripGroup>> getUserGroups(@RequestParam String userId) {
             log.info("Fetching trip groups for user '{}'", userId);
             List<TripGroup> groups = tripGroupService.getUserGroups(userId);
@@ -45,12 +47,14 @@ public class TripGroupController {
         }
 
     @DeleteMapping("/{tripGroupId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<String> deleteGroup(@PathVariable String tripGroupId,@RequestParam String userId) {
         tripGroupService.deleteGroup(tripGroupId,userId);
         return ResponseEntity.ok("Trip group deleted successfully.");
     }
 
     @GetMapping("/{tripGroupId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getGroupById(@PathVariable String tripGroupId) {
         try {
             TripGroup group = tripGroupService.getGroupById(tripGroupId);
@@ -62,8 +66,10 @@ public class TripGroupController {
 
 //    @PreAuthorize("hasRole('USER')")
     @PostMapping("/{groupId}/members")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> addMemberToGroup(@PathVariable String groupId, @RequestParam String userId) {
         try {
+            System.out.println(userId);
             tripGroupService.addMemberToGroup(groupId, userId);
             return ResponseEntity.ok("User added to group successfully");
         } catch (Exception e) {

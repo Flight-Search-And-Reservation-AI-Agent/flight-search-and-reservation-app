@@ -1,9 +1,13 @@
 package com.mycompany.flightapp.service;
 
+import com.mycompany.flightapp.dto.OptionDTO;
+import com.mycompany.flightapp.dto.PollUpdateMessage;
 import com.mycompany.flightapp.model.*;
 import com.mycompany.flightapp.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +29,10 @@ public class PollServiceImpl implements PollService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
 
     @Override
     public Poll createPoll(String tripGroupId, String question, List<String> options, boolean anonymous) {
@@ -55,6 +63,7 @@ public class PollServiceImpl implements PollService {
         return pollRepository.findByTripGroup_TripGroupId(tripGroupId);
     }
 
+    @Transactional
     @Override
     public void voteOption(String optionId, String userId, String pollId) {
         User user = userRepository.findById(userId)
@@ -89,7 +98,24 @@ public class PollServiceImpl implements PollService {
                     .build();
             userVoteRepository.save(vote);
         }
+
+        List<OptionDTO> updatedOptions = pollOptionRepository.findByPoll_PollId(pollId)
+                .stream()
+                .map(option -> new OptionDTO(
+                        option.getOptionId(),
+                        option.getOptionText(),
+                        option.getVoteCount()
+                ))
+                .collect(Collectors.toList());
+
+        // Retrieve the trip group ID from the poll
+        String tripGroupId = poll.getTripGroup().getTripGroupId();
+
+        // Send real-time update using trip group ID as topic
+        PollUpdateMessage updateMessage = new PollUpdateMessage(pollId, updatedOptions);
+        messagingTemplate.convertAndSend("/topic/poll-updates/" + tripGroupId, updateMessage);
     }
+
 
     @Override
     public Poll updatePoll(String pollId, Poll pollRequest) {

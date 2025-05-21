@@ -94,6 +94,7 @@ public class AuthenticationController {
         JwtResponse response = JwtResponse.builder()
                 .token(token)
                 .expiryDate(expiry)
+                .role(role)
                 .build();
 
         return ResponseEntity.ok(response);

@@ -6,6 +6,7 @@ import com.mycompany.flightapp.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class PollController {
     private PollService pollService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Poll> createPoll(
             @PathVariable String tripGroupId,
             @RequestBody PollDTO createPollRequest) {
@@ -32,6 +34,7 @@ public class PollController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<List<Poll>> getPollsForTripGroup(@PathVariable String tripGroupId) {
         List<Poll> polls = pollService.getPollsForTripGroup(tripGroupId);
         return ResponseEntity.ok(polls);
@@ -39,6 +42,7 @@ public class PollController {
 
     // ✅ New voting endpoint
     @PostMapping("/{pollId}/vote/{optionId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<String> voteOption(
             @PathVariable String tripGroupId,
             @PathVariable String pollId,
@@ -50,6 +54,7 @@ public class PollController {
     }
 
     @PutMapping("/{pollId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Poll> updatePoll(@PathVariable String pollId,
                                            @RequestBody Poll pollRequest) {
         Poll updated = pollService.updatePoll(pollId, pollRequest);
@@ -57,6 +62,7 @@ public class PollController {
     }
 
     @DeleteMapping("/{pollId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<Void> deletePoll(@PathVariable String pollId) {
         try {
             pollService.deletePoll(pollId);

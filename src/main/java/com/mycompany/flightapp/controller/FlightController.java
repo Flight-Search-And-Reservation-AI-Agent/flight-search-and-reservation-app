@@ -30,13 +30,14 @@ public class FlightController {
 
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<?> getAllFlights() {
         List<FlightResponseDTO> flights = flightService.getAllFlights();
         return ResponseEntity.ok(flights);
     }
 
     @GetMapping("/search")
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> searchFlights(
             @RequestParam String origin,
             @RequestParam String destination,
@@ -80,7 +81,7 @@ public class FlightController {
 
     //Retrieve fligth details by id
     @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<?> getFlightById(@PathVariable String id){
         try{
             Flight flight=flightService.getFlightById(id);
@@ -101,7 +102,7 @@ public class FlightController {
 
     // Admin-only endpoint to add a new flight
     @PostMapping("/add")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addFlight(@Valid @RequestBody FlightDTO flightDTO) {
         try{
             Flight flight = flightService.addFlight(flightDTO);
@@ -115,7 +116,7 @@ public class FlightController {
 
     // Update flight Info
     @PutMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateFlight(@PathVariable String id, @Valid @RequestBody FlightDTO flightDTO){
         try{
             Flight updatedFlight =flightService.updateFlight(id,flightDTO);
@@ -135,7 +136,7 @@ public class FlightController {
 
     //Delete flight by id
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteFlight(@PathVariable String id){
         try{
             boolean deleted= flightService.deleteFlight(id);
