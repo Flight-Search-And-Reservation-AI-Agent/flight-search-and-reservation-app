@@ -1,11 +1,18 @@
 package com.mycompany.flightapp.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class FlightDTO {
 
     @NotNull(message = "Flight number is required")
@@ -18,13 +25,13 @@ public class FlightDTO {
     private LocalDateTime arrivalTime;
 
     @NotNull(message = "Origin airport ID is required")
-    private Long originAirportId;
+    private String originAirportId;
 
     @NotNull(message = "Destination airport ID is required")
-    private Long destinationAirportId;
+    private String destinationAirportId;
 
     @NotNull(message = "Aircraft ID is required")
-    private Long aircraftId;
+    private String aircraftId;
 
     @NotNull(message = "Price is required")
     private Double price;

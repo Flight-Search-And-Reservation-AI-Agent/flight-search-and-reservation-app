@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface FlightRepository extends JpaRepository<Flight, Long> {
+public interface FlightRepository extends JpaRepository<Flight, String> {
 
     // Custom query: Search flights by airport codes and departure time range.
     List<Flight> findByOrigin_CodeAndDestination_CodeAndDepartureTimeBetween(
