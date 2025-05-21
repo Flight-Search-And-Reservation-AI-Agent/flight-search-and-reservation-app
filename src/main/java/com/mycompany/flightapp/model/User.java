@@ -1,6 +1,7 @@
 package com.mycompany.flightapp.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import jakarta.persistence.*;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class User {
 
     @Id
