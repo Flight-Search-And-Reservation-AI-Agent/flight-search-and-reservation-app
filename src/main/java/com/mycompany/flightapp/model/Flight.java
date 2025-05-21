@@ -3,6 +3,8 @@ package com.mycompany.flightapp.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -12,8 +14,10 @@ import java.time.LocalDateTime;
 public class Flight {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long flightId;
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "id", updatable = false, nullable = false)
+    private String flightId;
 
     @Column(nullable = false, unique = true)
     private String flightNumber;
