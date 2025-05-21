@@ -2,8 +2,8 @@ spring:
   datasource:
     url: jdbc:postgresql://flight-app-backend-flight-app-backend.j.aivencloud.com:27541/defaultdb?sslmode=require
     driver-class-name: org.postgresql.Driver
-    username: avnadmin
-    password: AVNS_6IUaqvWrvka-OxZarNq
+    username:
+    password:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
