@@ -1,25 +1,18 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    driver-class-name: org.postgresql.Driver
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
-    hikari:
-      maximum-pool-size: 3
-      minimum-idle: 1
+#    url: jdbc:h2:mem:flightdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:file:./data/flightdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
-      ddl-auto: update   # in prod, keep validate or none; for dev, use update/create-drop
+      ddl-auto: update   # Useful for development; auto-creates/updates schema
   h2:
     console:
-      enabled: false
+      enabled: true      # Access via http://localhost:8080/h2-console
+      path: /h2-console
 
 server:
   port: 8080
-
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl: DEBUG
-    org.springframework.jdbc.datasource: DEBUG
