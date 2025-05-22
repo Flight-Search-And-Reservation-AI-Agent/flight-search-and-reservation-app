@@ -50,6 +50,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        if (path.equals("/ws" )) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String requestHeader = request.getHeader("Authorization");
         String username = null;

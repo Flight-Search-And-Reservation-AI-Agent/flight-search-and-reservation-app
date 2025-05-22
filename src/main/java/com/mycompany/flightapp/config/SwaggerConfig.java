@@ -21,7 +21,7 @@ public class SwaggerConfig {
                                 .description("By Divay")
                 )
                 .servers(Arrays.asList(new Server().url("http://localhost:8080").description("local"),
-                        new Server().url("http://localhost:8081").description("live") ))
+                        new Server().url("https://flightapp-backend-new.uc.r.appspot.com").description("live") ))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components().addSecuritySchemes(
                         "bearerAuth",new SecurityScheme()

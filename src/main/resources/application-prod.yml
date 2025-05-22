@@ -1,9 +1,12 @@
 spring:
   datasource:
-    url: jdbc:postgresql://flight-app-backend-flight-app-backend.j.aivencloud.com:27541/defaultdb?sslmode=require
+    url: ${SPRING_DATASOURCE_URL}
     driver-class-name: org.postgresql.Driver
-    username:
-    password:
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    hikari:
+      maximum-pool-size: 3
+      minimum-idle: 1
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

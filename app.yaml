@@ -4,6 +4,9 @@ entrypoint: java -jar target/flightapp-0.0.1-SNAPSHOT.jar
 
 env_variables:
   SPRING_PROFILES_ACTIVE: "prod"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://flight-app-backend-flight-app-backend.j.aivencloud.com:27541/defaultdb?sslmode=require"
+  SPRING_DATASOURCE_USERNAME: "avnadmin"
+  SPRING_DATASOURCE_PASSWORD: "AVNS_af4uLEX5jf6j6jLea1a"
 
 handlers:
   - url: /.*
