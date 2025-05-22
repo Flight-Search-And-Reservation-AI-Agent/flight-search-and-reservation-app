@@ -1,17 +1,17 @@
 spring:
-  application:
-   name: FlightApp
-
   profiles:
-    active: prod  # Change to 'prod' in production or override via command line/environment variable
+    active: prod
 
-  # Other global configurations can also go here
-  logging:
-    level:
-      root: INFO
+application:
+  name: FlightApp
+
+logging:
+  level:
+    root: INFO
+
 server:
-  port: 8000
+  port: 8080
+
 springdoc:
   swagger-ui:
     path: /docs
-
