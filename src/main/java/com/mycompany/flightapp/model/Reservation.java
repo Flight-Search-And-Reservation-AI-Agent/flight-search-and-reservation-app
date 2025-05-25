@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -38,6 +39,10 @@ public class Reservation {
     private String status; // e.g., "BOOKED" or "CANCELLED"
 
     private LocalDateTime reservationTime;
+
+    @ElementCollection
+    @CollectionTable(name = "reservation_passengers", joinColumns = @JoinColumn(name = "reservation_id"))
+    private List<Passenger> passengers;
 
 }
 

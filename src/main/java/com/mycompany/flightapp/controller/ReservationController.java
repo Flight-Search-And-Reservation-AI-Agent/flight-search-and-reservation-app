@@ -1,5 +1,6 @@
 package com.mycompany.flightapp.controller;
 
+import com.mycompany.flightapp.dto.CreateReservationRequest;
 import com.mycompany.flightapp.dto.ReservationDTO;
 import com.mycompany.flightapp.model.Reservation;
 import com.mycompany.flightapp.service.ReservationService;
@@ -77,20 +78,20 @@ public class ReservationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createReservation(@RequestBody ReservationDTO reservationDTO) {
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<?> createReservation(@RequestBody CreateReservationRequest request) {
 
         try{
-            Reservation reservation = reservationService.createReservation(reservationDTO);
+            Reservation reservation = reservationService.createReservation(request);
             return ResponseEntity.ok(reservation);
         }catch (Exception e) {
-            log.error("Error creating reservation for data: {}", reservationDTO, e);
+            log.error("Error creating reservation for data: {}", request, e);
             return ResponseEntity.status(400).body("Failed to create reservation: " + e.getMessage());
         }
     }
 
     @DeleteMapping("/{reservationId}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<?> cancelReservation(@PathVariable String reservationId) {
         try{
             boolean canceled= reservationService.cancelReservation(reservationId);

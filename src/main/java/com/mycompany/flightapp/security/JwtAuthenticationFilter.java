@@ -50,7 +50,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        if (path.equals("/ws" )) {
+        if (path.startsWith("/ws")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (path.startsWith("/actuator/prometheus")) {
             filterChain.doFilter(request, response);
             return;
         }

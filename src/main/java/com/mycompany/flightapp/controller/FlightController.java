@@ -55,6 +55,7 @@ public class FlightController {
             // Convert to DTO
             List<FlightResponseDTO> flightDTOs = flights.stream().map(flight -> {
                 FlightResponseDTO dto = new FlightResponseDTO();
+                dto.setFlightId(flight.getFlightId());
                 dto.setFlightNumber(flight.getFlightNumber());
                 dto.setDepartureTime(flight.getDepartureTime());
                 dto.setArrivalTime(flight.getArrivalTime());

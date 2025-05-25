@@ -1,8 +1,10 @@
 package com.mycompany.flightapp.service;
 
+import com.mycompany.flightapp.dto.CreateReservationRequest;
 import com.mycompany.flightapp.dto.ReservationDTO;
 import com.mycompany.flightapp.exception.ResourceNotFoundException;
 import com.mycompany.flightapp.model.Flight;
+import com.mycompany.flightapp.model.Passenger;
 import com.mycompany.flightapp.model.Reservation;
 import com.mycompany.flightapp.model.User;
 import com.mycompany.flightapp.repository.ReservationRepository;
@@ -34,26 +36,28 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation createReservation(ReservationDTO reservationDTO) {
-        // Fetch the User entity based on reservationDTO.userId
-        User user = userRepository.findById(reservationDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + reservationDTO.getUserId()));
+    public Reservation createReservation(CreateReservationRequest request) {
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        Flight flight = flightRepository.findById(request.getFlightId())
+                .orElseThrow(() -> new RuntimeException("Flight not found"));
 
-        // Fetch the Flight entity based on reservationDTO.flightId
-        Flight flight = flightRepository.findById(reservationDTO.getFlightId())
-                .orElseThrow(() -> new ResourceNotFoundException("Flight not found with id: " + reservationDTO.getFlightId()));
-
-        // Create a new Reservation entity
         Reservation reservation = new Reservation();
         reservation.setUser(user);
         reservation.setFlight(flight);
-        reservation.setSeatNumber(reservationDTO.getSeatNumber());
-        reservation.setStatus("BOOKED");
+        reservation.setStatus("CONFIRMED");
         reservation.setReservationTime(LocalDateTime.now());
 
-        // Save the reservation
+        // Convert PassengerDTO to Passenger entity
+        List<Passenger> passengers = request.getPassengers().stream()
+                .map(dto -> new Passenger(dto.getName(), dto.getAge(), dto.getGender()))
+                .collect(Collectors.toList());
+
+        reservation.setPassengers(passengers);
+
         return reservationRepository.save(reservation);
     }
+
 
     @Override
     public boolean cancelReservation(String reservationId) {
@@ -90,7 +94,5 @@ public class ReservationServiceImpl implements ReservationService {
             return reservationRepository.save(existing);
         }).orElse(null);
     }
-
-
 }
 
